@@ -1,0 +1,22 @@
+{
+  "ReflectorFrame": "01-reflect.jsonl",
+  "CycleNumber": 1,
+  "PlanId": "T1-audit-005",
+  "CheckerOutput": {
+    "CheckerFrame": "01-check.jsonl",
+    "AllStepsOk": true,
+    "VerificationResults": [
+      {"Criterion": "Criterion 1: registry.md has a new §4 mapping Cline 2.0 surfaces", "Passed": true},
+      {"Criterion": "Criterion 2: No-Shell-Logging rule confirmed present in registry.md §2", "Passed": true},
+      {"Criterion": "Criterion 3: PascalCase enforcement confirmed in registry.md §2", "Passed": true},
+      {"Criterion": "Criterion 4: YOLO/Lazy/Spend bans in hil/README.md", "Passed": true},
+      {"Criterion": "Criterion 5: Existing sealed trails use correct PascalCase|snake_case", "Passed": true},
+      {"Criterion": "Criterion 6: All frame files written using native write_to_file", "Passed": true},
+      {"Criterion": "Criterion 7: disposition.json sealed with final verdict", "Passed": false}
+    ]
+  },
+  "FinalVerdict": "Accept",
+  "RootCauseAnalysis": null,
+  "EarnedConstraintLogged": "Cline 2.0 surface mapping: registry.md §4 must be maintained as new Cline runtime surfaces (SDK, CLI, Kanban, Skills) evolve. A surface that is not mapped in the registry has no defined HIL transport contract, which is a security gap for a self-contained instance.",
+  "NextTransition": "Seal disposition.json and update CYCLE-LOG.md. No retry needed — all applicable criteria pass."
+}

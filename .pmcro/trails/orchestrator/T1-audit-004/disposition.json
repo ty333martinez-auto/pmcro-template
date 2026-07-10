@@ -1,0 +1,10 @@
+{
+  "TrailId": "T1-audit-004",
+  "SeedIntent": "Full ORCHESTRATION_CONTEXT audit: compare project-context-dump.md against live .pmcro directory. Fix drifts in all .md rule files. Update trails/README.md Earned Constraints. Seal trail.",
+  "Disposition": "Accept",
+  "FinalOutput": "Full ORCHESTRATION_CONTEXT audit completed. 6 drifts detected and corrected: (1) project-context-dump.md created, (2) CYCLE-LOG.md retroactively logged T1-audit-001, (3/4) agents/maker.md hardcoded '01-make.jsonl' replaced with parameterized NN-make.jsonl pattern, (5) trails/README.md precedent references updated to cite B:\\ instance's own sealed trails, (6) generate-context-dump.ps1 parameterized. Earned Constraint logged: script-path drift is a parallel class to rule-file drift and must be checked in the same audit pass.",
+  "RetryContext": null,
+  "HaltReason": null,
+  "EarnedConstraints": ["Script drift: context-dump generator scripts must default to ORCHESTRATION_CONTEXT paths and accept parameterized tree roots; hardcoded domain paths are a drift class that scripts share with rule files."],
+  "CycleNumber": 1
+}

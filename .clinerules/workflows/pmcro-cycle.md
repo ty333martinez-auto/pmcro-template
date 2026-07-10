@@ -29,9 +29,9 @@ regardless of how small it looks. Do not skip any numbered step below.
    `B:\pmcro-cline\.pmcro\agents\registry.md` and TYPE1/TYPE2. Do not
    execute anything yet. Mint a fresh `trailId` (GUID) if this is cycle
    1 of a new seed intent; reuse the existing `trailId` if this is a
-   Retry. Write `B:\pmcro-cline\.pmcro\trails\<trailId>\00-frame.json`
+   Retry. Write `B:\pmcro-cline\.pmcro\trails\<subject-agent>\<trailId>\00-frame.json`
    (cycle 1 only), then
-   `B:\pmcro-cline\.pmcro\trails\<trailId>\NN-plan.jsonl` — PascalCase,
+   `B:\pmcro-cline\.pmcro\trails\<subject-agent>\<trailId>\NN-plan.jsonl` — PascalCase,
    nested-per-phase shape, per the real sealed-trail precedent at
    `S:\.pmcro\trails\` (see "Field shape reality check" in
    `B:\pmcro-cline\.pmcro\trails\README.md`), not the aspirational
@@ -43,22 +43,22 @@ regardless of how small it looks. Do not skip any numbered step below.
    for Cline's own approval UI to fire and be answered — never assume
    approval. Capture the actual tool-call/tool-result — never a
    narrated "this should work." Write
-   `B:\pmcro-cline\.pmcro\trails\<trailId>\NN-make.jsonl` (one write,
+   `B:\pmcro-cline\.pmcro\trails\<subject-agent>\<trailId>\NN-make.jsonl` (one write,
    `MakerFrame` shape) before moving to Check.
 
 4. **Check.** Independently re-derive pass/fail from raw evidence for
    each step. Write
-   `B:\pmcro-cline\.pmcro\trails\<trailId>\NN-check.jsonl` (`CheckerFrame`
+   `B:\pmcro-cline\.pmcro\trails\<subject-agent>\<trailId>\NN-check.jsonl` (`CheckerFrame`
    shape).
 
 5. **Reflect.** State an explicit verdict: Accept / Retry / Halt. If
    something failed in a genuinely new way, write one sentence and
    append it under Earned Constraints in
    `B:\pmcro-cline\.pmcro\trails\README.md`. Write
-   `B:\pmcro-cline\.pmcro\trails\<trailId>\NN-reflect.jsonl`
+   `B:\pmcro-cline\.pmcro\trails\<subject-agent>\<trailId>\NN-reflect.jsonl`
    (`ReflectorFrame` shape).
 
-6. **Seal.** Write `B:\pmcro-cline\.pmcro\trails\<trailId>\disposition.json`
+6. **Seal.** Write `B:\pmcro-cline\.pmcro\trails\<subject-agent>\<trailId>\disposition.json`
    with the terminal verdict (PascalCase fields — see
    `B:\pmcro-cline\.pmcro\trails\README.md` for the exact shape). This is
    the last action of the cycle. On Retry, go back to step 2 with the
@@ -72,7 +72,7 @@ regardless of how small it looks. Do not skip any numbered step below.
 
 - Windows PowerShell — use `;` to chain shell commands, never `&&`.
 - Each phase writes its own new file under
-  `B:\pmcro-cline\.pmcro\trails\<trailId>\` — written once, before
+  `B:\pmcro-cline\.pmcro\trails\<subject-agent>\<trailId>\` — written once, before
   moving to the next phase. There's nothing to re-read before writing
   since these files are never appended to (unlike the old flat-file
   format).

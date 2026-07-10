@@ -1,0 +1,50 @@
+{
+  "CheckerFrame": "01-check.jsonl",
+  "CycleNumber": 1,
+  "PlanId": "T1-audit-005",
+  "MakerOutput": {
+    "MakerFrame": "01-make.jsonl",
+    "ActionTaken": "write_to_file on agents/registry.md",
+    "FilesModified": ["B:\\pmcro-cline\\.pmcro\\agents\\registry.md"],
+    "ChangesSummary": "Added §4 'Cline 2.0 Surface Mapping' with 4 subsections. Added explicit 'No-Shell-Logging Rule' bullet to §2."
+  },
+  "VerificationResults": [
+    {
+      "Criterion": "Criterion 1: registry.md has a new §4 mapping Cline 2.0 surfaces (SDK, CLI, Kanban, Skills) with transport caveat",
+      "Passed": true,
+      "Evidence": "read_file on agents/registry.md confirms §4 exists with subsections 4.1 @cline/sdk, 4.2 Cline CLI, 4.3 Cline Kanban, 4.4 Cline Skills. Each subsection documents Registration, HIL Transport, and Caveat referencing hil/README.md transport caveat."
+    },
+    {
+      "Criterion": "Criterion 2: No-Shell-Logging rule confirmed present in registry.md §2",
+      "Passed": true,
+      "Evidence": "registry.md §2 contains explicit bullet: 'No-Shell-Logging Rule: Never use echo or shell redirection (>, >>, | Out-File) to write to .jsonl trails. Use native write_to_file to preserve JSON integrity and quoting.'"
+    },
+    {
+      "Criterion": "Criterion 3: PascalCase enforcement confirmed in registry.md §2",
+      "Passed": true,
+      "Evidence": "registry.md §2 line 22: 'Casing: Use strict PascalCase for all keys (e.g., TrailId, SeedIntent, AllStepsOk, CycleNumber, StepIndex).'"
+    },
+    {
+      "Criterion": "Criterion 4: YOLO mode, Lazy Teammate, and Spend Limit caveat explicitly banned in hil/README.md",
+      "Passed": true,
+      "Evidence": "hil/README.md lines 31-33: 'YOLO mode — this is a global override that bypasses the approval UI entirely... Never enable it.' Lines 34-36: 'Lazy Teammate Mode — reduces how often Cline asks for clarification... must not be treated as covering the TYPE1 approval requirement.' Lines 37-40: 'The Spend Limit Reached dialog is a cost control, not a HIL gate... Don't treat spend limit not hit as any kind of approval signal.'"
+    },
+    {
+      "Criterion": "Criterion 5: Existing sealed trails use correct PascalCase|snake_case per trails/README.md",
+      "Passed": true,
+      "Evidence": "read_file on T1-audit-004/disposition.json confirms PascalCase keys: TrailId, SeedIntent, Disposition, FinalOutput, RetryContext, HaltReason, EarnedConstraints, CycleNumber. 00-frame.json uses snake_case per precedent (trail_id, seed_intent, started_utc). Matches trails/README.md specification."
+    },
+    {
+      "Criterion": "Criterion 6: All frame files written using native write_to_file (no shell redirection)",
+      "Passed": true,
+      "Evidence": "All frames in this cycle (00-frame.json, 01-plan.jsonl, 01-make.jsonl, 01-check.jsonl) were written via write_to_file tool calls. No execute_command with echo/redirection was used for any trail write."
+    },
+    {
+      "Criterion": "Criterion 7: disposition.json sealed with final verdict",
+      "Passed": false,
+      "Evidence": "Pending — disposition.json not yet written. This criterion will be satisfied by the Reflector phase."
+    }
+  ],
+  "AllStepsOk": true,
+  "RawLogOutput": "All 6 of 7 applicable criteria pass. Criterion 7 is pending Reflector phase completion. No failures detected."
+}

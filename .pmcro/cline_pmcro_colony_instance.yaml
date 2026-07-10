@@ -40,7 +40,7 @@ evidence:
 
 trail:
   format: "one directory per trailId under trails/, one file per phase per cycle (00-frame.json, NN-plan.jsonl, NN-make.jsonl, NN-check.jsonl, NN-reflect.jsonl, disposition.json)"
-  location: "B:\\pmcro-cline\\.pmcro\\trails\\<trailId>\\"
+  location: "B:\\pmcro-cline\\.pmcro\\trails\\<subject-agent>\\<trailId>\\"
 
 hil:
   transport: "Cline's native tool-approval UI (chat-button style)"

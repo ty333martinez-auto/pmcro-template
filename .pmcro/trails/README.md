@@ -16,7 +16,7 @@ workspace's sandbox era, and the git-merge collision risk of two people
 appending to one growing file.
 
 ```
-B:\pmcro-cline\.pmcro\trails\<trailId>\
+B:\pmcro-cline\.pmcro\trails\<subject-agent>\<trailId>\
     00-frame.json     — {"trail_id", "seed_intent", "started_utc"}
     01-plan.jsonl      — cycle 1 Planner frame
     01-make.jsonl      — cycle 1 Maker frame
@@ -28,19 +28,16 @@ B:\pmcro-cline\.pmcro\trails\<trailId>\
 
 `trailId` is a fresh GUID (or any collision-proof unique string) minted
 by Planner at the start of a cycle — **never reused, never guessed.**
-This instance does not nest under a subject-agent folder like the
-production Colony does (that split exists there because each subject
-agent runs its own independent loop; here Cline runs one loop per
-cycle), so the layout is simply `trails/<trailId>/...` directly.
+This instance nests under a subject-agent folder matching the
+production Colony layout at `S:\.pmcro\trails\<subject-agent>\<trailId>\`.
+The physical disk confirms `trails/orchestrator/T1-audit-001/` exists,
+so the layout is `trails/<subject-agent>/<trailId>/...`.
 
 ## Field shape reality check (2026-07-10 audit finding)
 
-`A:\source\.agents\skills\pmcro-base\references\frame-schemas.md`
-describes a flat, camelCase field shape (`stepId`, `subjectAgent`,
-`allStepsOk`, etc.) and earlier versions of this README claimed that
-shape "matches real sealed trails at `S:\.pmcro\trails\`." **That claim
-was checked against the actual files and is false.** The real sealed
-trails at `S:\.pmcro\trails\playwright-agent\<trailId>\` are:
+This instance's own sealed trails (at `B:\pmcro-cline\.pmcro\trails\orchestrator\T1-audit-002\`
+and `T1-audit-003\`) are the authoritative precedent for field shape.
+These files use:
 
 - **PascalCase throughout** — `TrailId`, `SeedIntent`, `AllStepsOk`,
   `StepIndex`, `Passed`, `CycleNumber` — not camelCase anywhere, in any
@@ -50,13 +47,17 @@ trails at `S:\.pmcro\trails\playwright-agent\<trailId>\` are:
   itself nests `Plan`). This is plain .NET `System.Text.Json` default
   serialization, not a hand-authored camelCase contract.
 
-Until `frame-schemas.md` is corrected or a deliberate decision is made to
-diverge from the production Colony's real shape, **this instance follows
-the real `S:\` precedent** (PascalCase, nested-per-phase) for
-`NN-plan.jsonl` / `NN-make.jsonl` / `NN-check.jsonl` / `NN-reflect.jsonl`,
-not the camelCase names in `frame-schemas.md`. Don't "fix" a frame file
-to match `frame-schemas.md` without checking a real `S:\` trail first —
-the doc, not the running system, was the thing that was wrong.
+This shape matches the production Colony at `S:\.pmcro\trails\playwright-agent\<trailId>\`
+(confirmed against real sealed files during T1-audit-002), so both
+instance and production remain consistent. The base template's
+`frame-schemas.md` at `A:\source\.agents\skills\pmcro-base\references\`
+still describes a flat camelCase shape that does not match either source
+of truth — that doc has not been corrected yet.
+
+**Don't "fix" a frame file to match `frame-schemas.md`.**
+The running system (both this instance and the production Colony) uses
+PascalCase nested-per-phase — the base template doc, not the running
+system, was the thing that was wrong.
 
 ## Envelope files — `00-frame.json` and `disposition.json`
 
@@ -132,7 +133,15 @@ up the quality gradient from Tier 0 (see the base template's
 `references/quality-gradient.md`). Don't invent a constraint that's
 already listed; check here first.
 
-*(none yet — this instance has no earned history. Don't claim any
-constraint, or a "shrinking HIL surface," until a real sealed
-`disposition.json` in `B:\pmcro-cline\.pmcro\trails\<trailId>\` actually
-backs it up.)*
+- **2026-07-10 (T1-audit-003):** A Tier-1 audit that only checks the
+  files named in its SeedIntent (e.g. `orchestrator.md` + `pmcro-loop.md`
+  in T1-audit-002) can leave sibling files with the same class of drift
+  unchecked. `agents/registry.md`, `agents/planner.md`, and
+  `agents/checker.md` all still described the pre-nesting flat/sequential
+  filename scheme (`01-maker.jsonl`, `02-checker.jsonl`, `00-plan.jsonl`)
+  after T1-audit-002 sealed Accept. Rule: a path/naming audit's scope
+  must be "every file that references the audited convention," found via
+  a real search, not a fixed file list named in the SeedIntent.
+- **2026-07-10 (T1-audit-004):** Context-dump generator scripts (`generate-context-dump.ps1`) must default to ORCHESTRATION_CONTEXT paths and accept parameterized tree roots. Hardcoded domain paths (`A:\`) that differ from the running instance's workspace are a drift class that scripts share with rule files — they must be checked in the same audit pass that checks agent `.md` files for path drift.
+- **2026-07-10 (T1-audit-005):** Cline 2.0 surface mapping: registry.md §4 must be maintained as new Cline runtime surfaces (SDK, CLI, Kanban, Skills) evolve. A surface that is not mapped in the registry has no defined HIL transport contract, which is a security gap for a self-contained instance.
+- **2026-07-10 (T1-audit-006):** Shell echo or redirection (`echo`, `>`, `>>`, `Out-File`, `Set-Content`) must never be used to write `.jsonl` or `.json` trail files. Only native tool calls (`write_to_file`, `replace_in_file`) are permitted for structured JSON writes. This prevents quote-interpolation corruption that has already destroyed audit continuity in this workspace (7-cycle flat-file overwrite, nested-JSON quote corruption from `powershell -Command`).

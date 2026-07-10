@@ -1,50 +1,60 @@
-# Subject-Agent Registry — PMCRO Colony (self-contained Cline instance)
+# PMCR-O: SYSTEM REGISTRY & SERIALIZATION CONTRACT
 
-Maps a subject-agent **name** to Cline's real tool surface, per
-`references/resource-access.md` §1 in the base `pmcro-base` template
-(`A:\source\.agents\skills\pmcro-base\`). The Orchestrator resolves names
-against this file at dispatch time. It never holds a flat tool list of
-its own — this file is the single source of truth for that mapping.
+## 1. TOOL CLASSIFICATION (HIL GOVERNANCE)
+Every tool available to the system is classified by its mutation risk. This classification determines whether the Human-In-The-Loop (HIL) gate is triggered.
 
-`resolve(name)` = look the name up in the table below. Not found ->
-return none / stop and say so. **Never guess a fallback silently.**
+### TYPE1: MUTATING (Requires HIL Approval)
+These actions alter the state of the Domain or Orchestration context. They must NEVER be auto-approved.
+- **Filesystem**: `write_to_file`, `replace_in_file`, `delete_file`, `create_directory`.
+- **Terminal**: `execute_command` (Always TYPE1, regardless of the command string).
+- **Browser**: `browser_action` (When performing `click`, `type`, or `submit`).
+- **MCP**: Any `use_mcp_tool` call that performs a write, delete, or deployment.
 
-**The Orchestrator itself is never a registrable name** — see
-`agents/orchestrator.md` for why.
+### TYPE2: READ-ONLY (Autonomous Flow)
+These actions observe state and do not require HIL approval.
+- **Filesystem**: `read_file`, `list_files`, `search_files`, `list_code_definition_names`.
+- **Browser**: `browser_action` (When performing `screenshot` or `scroll`).
+- **MCP**: Any `use_mcp_tool` call that fetches logs, metrics, or read-only data.
 
-## Registry table
+## 2. IMMUTABLE STATE CONTRACT
+To ensure the audit trail is machine-readable and follows 2026 enterprise standards, all `.jsonl` and `.json` files in the `trails/` directory MUST adhere to this schema:
 
-| name | real Cline tools | TYPE1 (mutating — HIL required) | TYPE2 (read-only — no gate) |
-|---|---|---|---|
-| `cline-fs-agent` | file tools, working root `A:\` (domain work) or `B:\pmcro-cline\.pmcro\` (this instance's own trail/config writes) | `write_to_file`, `replace_in_file` | `read_file`, `list_files`, `search_files`, `list_code_definition_names` |
-| `cline-terminal-agent` | shell (PowerShell) — `dotnet build`, `dotnet test`, `dotnet run`, `git`, `aspire`, `ollama` | `execute_command` | *(none — no safe read-only subset; always TYPE1)* |
-| `cline-browser-agent` | Playwright/Patchright browser automation | `browser_action.click`, `browser_action.type` | `browser_action.launch`, `browser_action.scroll`, `browser_action.screenshot` |
-| `cline-mcp-agent` | any connected MCP server (Filesystem, Atlassian Rovo, Postman, etc.) | any mutating `use_mcp_tool` call (e.g. `Filesystem:write_file`, `Atlassian Rovo:createJiraIssue`, `Atlassian Rovo:editJiraIssue`) | read-only `use_mcp_tool` calls (e.g. `Filesystem:read_file`, `Atlassian Rovo:getJiraIssue`, `Atlassian Rovo:search`) + `access_mcp_resource` |
+- **Casing**: Use strict **PascalCase** for all keys (e.g., `TrailId`, `SeedIntent`, `AllStepsOk`, `CycleNumber`, `StepIndex`).
+- **Structure (Nested Envelopes)**: Do not flatten phase data. Each subsequent phase must wrap the previous phase's output.
+    - `NN-plan.jsonl` — Planner's frame for cycle `NN`.
+    - `NN-make.jsonl` — Maker's frame; contains the `Plan` output.
+    - `NN-check.jsonl` — Checker's frame; contains `MakerOutput`, which nests `Plan`.
+    - `NN-reflect.jsonl` — Reflector's frame; contains `CheckerOutput`, nesting the full chain.
+    - `NN` is the cycle number within one `trailId` (increments only on Retry, per `pmcro-cycle.md` step 6) — not a running count across phases.
+- **Serialization**: Every write must be performed using a native file-write tool call. Do not use shell interpolation, as it corrupts nested JSON quotes.
+- **No-Shell-Logging Rule**: Never use `echo` or shell redirection (`>`, `>>`, `| Out-File`) to write to `.jsonl` trails. Use native `write_to_file` to preserve JSON integrity and quoting.
 
-This table must match `subject_agents:` in `cline_pmcro_colony_instance.yaml`.
+## 3. REALITY CHECK OVERRIDE
+If a conflict arises between this document and an existing, sealed file in `ORCHESTRATION_CONTEXT/.pmcro/trails/`, the **on-disk file is the ground truth**. You must update this registry to match the observed reality of the filesystem immediately.
 
-## Domain-specific note
+## 4. CLINE 2.0 SURFACE MAPPING
+Cline 2.0 (May 2026+) has decomposed its runtime into several distinct surfaces that interact with the PMCR-O loop. Each surface has a different HIL transport contract. This section maps each surface and documents the transport caveat.
 
-This instance is now **self-contained**: Cline's workspace root and this
-instance's own data both live at `B:\pmcro-cline\`. The **domain** of
-actual engineering work is still the real Colony project at `A:\` — every
-`cline-fs-agent` and `cline-terminal-agent` action targeting Colony work
-must use an **explicit absolute `A:\...` path**, never a bare relative
-path (which would resolve against `B:\pmcro-cline` instead). For
-`cline-terminal-agent`, that means either a full path per command or a
-leading `cd A:\...;` (PowerShell `;`, not `&&`) before the real command.
-Writes to this instance's own trail/config data use explicit
-`B:\pmcro-cline\.pmcro\...` paths instead.
+### 4.1 @cline/sdk (SDK Runtime)
+The extracted `@cline/sdk` package is the core runtime on which the CLI, Kanban, and IDE extensions are built. As of 2026-07-10, the VS Code/JetBrains extensions are mid-migration onto this SDK; the CLI and Kanban already use it natively.
+- **Registration**: Not directly a tool surface — it is the runtime substrate. However, any code that embeds `@cline/sdk` directly bypasses the interactive approval UI unless explicitly wired to it.
+- **HIL Transport**: The SDK does not mandate any particular approval transport. An embedding application must provide its own.
+- **Caveat**: All applications built on `@cline/sdk` inherit only the approval transport the embedding app implements. This instance's HIL contract (interactive UI button) only holds inside the VS Code/JetBrains extension.
 
-`cline-terminal-agent` steps here can affect the actual .NET solution,
-Aspire resources, and running Ollama models — treat every TYPE1 terminal
-step with the same weight as an fs-agent write, even for commands that
-look read-only (`dotnet test` can still mutate build artifacts, touch
-ports, etc.).
+### 4.2 Cline CLI (`cline --json`)
+The CLI surface invokes Cline from a shell with structured JSON input/output.
+- **Registration**: Not a Cline tool — it is an invocation entry point. Commands issued via `cline --json "..."` do not trigger the interactive approval UI.
+- **HIL Transport**: None. The CLI is headless by design. All tool actions run with whatever auto-approve policy is configured — there is no per-action human gate.
+- **Caveat**: This instance MUST NOT be invoked via the CLI unless the HIL transport is explicitly confirmed to be a blocking approval gate. The `hil/README.md` transport caveat (lines 9-16) applies here.
 
-## Naming discipline check (Core Mechanic 7)
+### 4.3 Cline Kanban (Parallel Dispatch)
+The Kanban board dispatches multiple Cline agents in parallel against independent work items.
+- **Registration**: Not a Cline tool — it is an orchestration surface. Kanban-dispatched agents may each run with their own configuration, potentially including different auto-approve settings.
+- **HIL Transport**: Each Kanban agent's HIL gate is whatever its individual configuration specifies. A Kanban agent configured with auto-approve on TYPE1 does not block — the human never sees the approval request.
+- **Caveat**: This instance must never be dispatched via Kanban unless every Kanban agent's TYPE1 categories have HIL gates explicitly enabled. The `hil/README.md` transport caveat applies to each Kanban agent independently.
 
-Before adding a new row: is this a genuinely new capability, or an
-existing tool group (fs / terminal / browser / mcp) pointed at a new
-target? Don't add e.g. a `skill-loader-agent` — that's `cline-fs-agent`
-reading/writing under `A:\source\.agents\skills\`, not a new capability.
+### 4.4 Cline Skills (Skill Registry)
+Skills are reusable, versioned capability packages that Cline can load. They extend the tool surface available to the agent.
+- **Registration**: Skills are registered in `cline_pmcro_colony_instance.yaml` or the equivalent instance configuration. They appear as tool groups under the `cline-mcp-agent` subject-agent in this registry's §1 classification.
+- **HIL Transport**: Each skill's tools inherit their TYPE1/TYPE2 classification from §1 of this registry. A skill tool that performs a mutation is TYPE1 and requires HIL approval via the interactive UI.
+- **Caveat**: If a skill is loaded via a headless surface (CLI, Kanban, SDK embedding), the HIL gate defined here may not fire — the skill's tool may run without human approval. Skills must only be loaded in surfaces where the HIL transport matches this instance's interactive UI contract.

@@ -1,0 +1,1 @@
+{"trail_id": "T1-audit-003", "seed_intent": "Follow-up Tier-1 audit: T1-audit-002 only checked orchestrator.md and pmcro-loop.md against disk. Check every remaining agent file (registry.md, planner.md, maker.md, checker.md, reflector.md) for the same class of path/naming drift.", "started_utc": "2026-07-10T00:00:00Z"}

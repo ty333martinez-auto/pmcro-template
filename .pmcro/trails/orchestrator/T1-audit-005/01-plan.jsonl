@@ -1,0 +1,30 @@
+{
+  "PlanId": "T1-audit-005",
+  "SeedIntent": "Meta-Cycle: Audit local registry.md, agents/, hil/, and MCP tools registered inside this instance. Update registry.md with Cline 2.0 surfaces (SDK, CLI, Kanban, Skills) if missing. Check No-Shell-Logging, PascalCase, YOLO/Lazy/Spend bans. Seal as T1-audit-005.",
+  "DiscoveryResults": {
+    "RegistryMdStatus": "registry.md covers TYPE1/TYPE2 classification and immutable state contract (PascalCase, nested envelopes). Does NOT reference any Cline 2.0 surfaces: @cline/sdk, cline --json (CLI), Cline Kanban, or Skills as a 2.0 runtime surface.",
+    "AgentsDirStatus": "All 6 agent files present (orchestrator, planner, maker, checker, reflector, registry). No missing agents.",
+    "HilReadmeStatus": "Contains explicit YOLO ban (lines 31-33), Lazy Teammate Mode ban (lines 34-36), Spend Limit gate caveat (lines 37-40). References CLI/Kanban/SDK transport caveat (lines 9-16).",
+    "McpToolsStatus": "No MCP config at B:\pmcro-cline level. MCP servers reside at A:\mcp-servers (Filesystem, Skills, Terminal, Terminal.AuthServer). No .vscode/mcp.json found.",
+    "Cline2Dot0Gap": "registry.md maps Cline tools as subject-agents (cline-fs-agent, cline-terminal-agent, cline-browser-agent, cline-mcp-agent) but has no row for the SDK runtime, CLI entry point, Kanban dispatch, or Skills subsystem."
+  },
+  "Steps": [
+    {"StepIndex": 1, "Action": "MAKE: Update agents/registry.md to add a §4 'Cline 2.0 Surface Mapping' section covering @cline/sdk (SDK runtime), cline --json (CLI), Cline Kanban (parallel dispatch), and Cline Skills (skill registry) as runtime surfaces. Reference the transport caveat from hil/README.md.",
+     "Tool": "write_to_file on agents/registry.md"},
+    {"StepIndex": 2, "Action": "CHECK: Verify No-Shell-Logging rule exists in registry.md §2 (lines 28-29 confirm). Verify PascalCase enforcement in registry.md §2 (line 22). Verify YOLO mode, Lazy Teammate, and Spend Limit caveats are explicitly banned in hil/README.md.",
+     "Tool": "read_file on agents/registry.md §2 and hil/README.md"},
+    {"StepIndex": 3, "Action": "CHECK: Confirm no shell-based logging violations in existing sealed trails. Read a sample disposition.json and confirm PascalCase|snake_case compliance per trails/README.md.",
+     "Tool": "read_file on T1-audit-004/disposition.json"},
+    {"StepIndex": 4, "Action": "REFLECT: Analyze Checker evidence, decide Accept/Retry/Halt, write disposition.json and sealed 01-reflect.jsonl. Update CYCLE-LOG.md.",
+     "Tool": "write_to_file on reflect frame + CYCLE-LOG.md"}
+  ],
+  "SuccessCriteria": [
+    "Criterion 1: registry.md has a new §4 mapping Cline 2.0 surfaces (SDK, CLI, Kanban, Skills) with transport caveat",
+    "Criterion 2: No-Shell-Logging rule confirmed present in registry.md §2",
+    "Criterion 3: PascalCase enforcement confirmed in registry.md §2",
+    "Criterion 4: YOLO mode, Lazy Teammate, and Spend Limit caveat explicitly banned in hil/README.md",
+    "Criterion 5: Existing sealed trails use correct PascalCase|snake_case per trails/README.md",
+    "Criterion 6: All frame files written using native write_to_file (no shell redirection)",
+    "Criterion 7: disposition.json sealed with final verdict"
+  ]
+}

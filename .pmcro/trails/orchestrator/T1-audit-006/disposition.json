@@ -1,0 +1,10 @@
+{
+  "TrailId": "T1-audit-006",
+  "SeedIntent": "Security Gate Hardening. Read Earned Constraints in trails/README.md. Draft a concrete constraint forbidding shell echo / redirection for JSON writes (based on past interpolation issues). Then propose a one-sentence update to maker.md enforcing write_file/edit_file preference. Seal as T1-audit-006. TYPE1 actions require HIL.",
+  "Disposition": "Accept",
+  "FinalOutput": "T1-audit-006 completed. Earned Constraint logged in trails/README.md: shell echo/redirection forbidden for JSON writes; only native write_to_file/replace_in_file permitted. maker.md §4 updated with JSON WRITE DISCIPLINE bullet. All writes performed via native tool calls (no shell redirection). TYPE1 HIL gate respected for all three mutations.",
+  "RetryContext": null,
+  "HaltReason": null,
+  "EarnedConstraints": ["Shell echo or redirection (echo, >, >>, Out-File, Set-Content) must never be used to write .jsonl or .json trail files. Only native tool calls (write_to_file, replace_in_file) are permitted for structured JSON writes. This prevents quote-interpolation corruption that has already destroyed audit continuity in this workspace (7-cycle flat-file overwrite, nested-JSON quote corruption from powershell -Command)."],
+  "CycleNumber": 1
+}

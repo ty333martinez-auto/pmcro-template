@@ -1,0 +1,10 @@
+{
+  "TrailId": "T1-audit-003",
+  "SeedIntent": "Follow-up Tier-1 audit: T1-audit-002 only checked orchestrator.md and pmcro-loop.md against disk. Check every remaining agent file for the same class of path/naming drift.",
+  "Disposition": "Accept",
+  "FinalOutput": "Found and fixed stale frame-filename references in registry.md, planner.md, and checker.md (pre-nesting flat/sequential scheme still present after T1-audit-002 sealed Accept). maker.md, reflector.md, and hil/README.md checked clean. Earned Constraint logged in trails/README.md about audit scope discovery vs. fixed file lists.",
+  "RetryContext": null,
+  "HaltReason": null,
+  "EarnedConstraints": ["Audit scope for drift checks must be discovered via search of the whole ORCHESTRATION_CONTEXT for the convention in question, not a fixed file list named in the SeedIntent."],
+  "CycleNumber": 1
+}

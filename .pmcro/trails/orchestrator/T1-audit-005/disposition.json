@@ -1,0 +1,10 @@
+{
+  "TrailId": "T1-audit-005",
+  "SeedIntent": "Meta-Cycle: Audit local registry.md, agents/, hil/, and MCP tools registered inside this instance. Update registry.md with Cline 2.0 surfaces (SDK, CLI, Kanban, Skills) if missing. Check No-Shell-Logging, PascalCase, YOLO/Lazy/Spend bans. Seal as T1-audit-005.",
+  "Disposition": "Accept",
+  "FinalOutput": "Meta-Cycle T1-audit-005 completed. registry.md updated with §4 Cline 2.0 Surface Mapping (SDK, CLI, Kanban, Skills) with transport caveats. No-Shell-Logging rule explicitly codified in §2. PascalCase enforcement verified in §2. YOLO/Lazy/Spend bans confirmed in hil/README.md. Existing sealed trails (T1-audit-004) verified using correct PascalCase|snake_case per trails/README.md precedent. All frame files written via native write_to_file (no shell redirection). Earned Constraint logged: Cline 2.0 surface mapping must be maintained as new runtime surfaces evolve.",
+  "RetryContext": null,
+  "HaltReason": null,
+  "EarnedConstraints": ["Cline 2.0 surface mapping: registry.md §4 must be maintained as new Cline runtime surfaces (SDK, CLI, Kanban, Skills) evolve. A surface that is not mapped in the registry has no defined HIL transport contract, which is a security gap for a self-contained instance."],
+  "CycleNumber": 1
+}

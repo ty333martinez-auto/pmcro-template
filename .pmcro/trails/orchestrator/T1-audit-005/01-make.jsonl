@@ -1,0 +1,29 @@
+{
+  "MakerFrame": "01-make.jsonl",
+  "CycleNumber": 1,
+  "PlanId": "T1-audit-005",
+  "Plan": {
+    "PlanId": "T1-audit-005",
+    "SeedIntent": "Meta-Cycle: Audit local registry.md, agents/, hil/, and MCP tools registered inside this instance. Update registry.md with Cline 2.0 surfaces (SDK, CLI, Kanban, Skills) if missing. Check No-Shell-Logging, PascalCase, YOLO/Lazy/Spend bans. Seal as T1-audit-005.",
+    "Steps": [
+      {"StepIndex": 1, "Action": "MAKE: Update agents/registry.md to add a §4 'Cline 2.0 Surface Mapping' section", "Tool": "write_to_file on agents/registry.md"},
+      {"StepIndex": 2, "Action": "CHECK: Verify No-Shell-Logging, PascalCase, YOLO/Lazy/Spend bans", "Tool": "read_file"},
+      {"StepIndex": 3, "Action": "CHECK: Confirm existing sealed trails use correct case", "Tool": "read_file"},
+      {"StepIndex": 4, "Action": "REFLECT: Analyze, decide, seal", "Tool": "write_to_file"}
+    ],
+    "SuccessCriteria": [
+      "Criterion 1: registry.md has a new §4 mapping Cline 2.0 surfaces",
+      "Criterion 2: No-Shell-Logging rule confirmed present in registry.md §2",
+      "Criterion 3: PascalCase enforcement confirmed in registry.md §2",
+      "Criterion 4: YOLO mode, Lazy Teammate, Spend Limit caveat banned in hil/README.md",
+      "Criterion 5: Existing sealed trails use correct PascalCase|snake_case",
+      "Criterion 6: All frame files written using native write_to_file",
+      "Criterion 7: disposition.json sealed with final verdict"
+    ]
+  },
+  "ActionTaken": "write_to_file on agents/registry.md",
+  "FilesModified": ["B:\\pmcro-cline\\.pmcro\\agents\\registry.md"],
+  "ChangesSummary": "Added §4 'Cline 2.0 Surface Mapping' with 4 subsections: 4.1 @cline/sdk (SDK Runtime), 4.2 Cline CLI (cline --json), 4.3 Cline Kanban (Parallel Dispatch), 4.4 Cline Skills (Skill Registry). Each subsection documents Registration, HIL Transport, and Caveat. Added explicit 'No-Shell-Logging Rule' bullet to §2 per the existing convention.",
+  "TerminalOutput": null,
+  "Errors": null
+}

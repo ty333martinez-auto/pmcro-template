@@ -4,7 +4,8 @@
 #>
 
 param(
-    [string]$OutputPath = "B:\project-context-dump.md",
+    [string]$OutputPath = "B:\pmcro-cline\.pmcro\project-context-dump.md",
+    [string]$TreeRoot = $null,
     [string]$EdgeTabsJson = $null
 )
 
@@ -24,12 +25,13 @@ Append-Markdown "`n---`n"
 # Directory Structure
 Append-Markdown "## Directory Structure"
 Append-Markdown '```text'
-try { 
-    $tree = tree A:\ /F /A 
-    Append-Markdown $tree 
-} catch { 
-    Append-Markdown "Error generating tree" 
-}
+    try { 
+        $target = if ($TreeRoot) { $TreeRoot } else { (Get-Location).Path }
+        $tree = tree $target /F /A 
+        Append-Markdown $tree 
+    } catch { 
+        Append-Markdown "Error generating tree for $target" 
+    }
 Append-Markdown '```'
 Append-Markdown "`n---`n"
 

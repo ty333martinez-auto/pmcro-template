@@ -1,0 +1,1 @@
+{"trail_id": "T1-audit-002", "seed_intent": "Architectural audit: compare file paths defined in orchestrator.md and pmcro-loop.md against physical disk structure. Fix any drift found. Seal as Tier 1 audit trail.", "started_utc": "2026-07-10T12:57:00Z"}
