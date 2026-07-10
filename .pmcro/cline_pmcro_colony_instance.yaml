@@ -1,0 +1,65 @@
+# Filled cycle-template instance — self-contained Colony instance
+# Instantiates templates/cycle-template.schema.yaml from pmcro-base
+# (A:\source\.agents\skills\pmcro-base\), tokenized for Cline running
+# against the real PMCRO Colony project itself, not a sandbox.
+#
+# Domain: the Colony's own development work (agents, skills, trails,
+# orchestrator, the MAF AgentSkillsProvider migration decision, etc.)
+# This is the loop governing its own construction — Tier 0 -> Tier 1
+# starts the moment cycle 1 actually runs and seals a real frame below.
+#
+# 2026-07-10: instance data relocated from A:\.pmcro\ to
+# B:\pmcro-cline\.pmcro\ — workspace root and instance root are now the
+# same place. Domain (A:\) is unchanged.
+
+schema_version: "1.0"
+
+identity:
+  company: "Tooensure LLC"
+  project: "PMCRO Colony"
+  repo: "CompanyName.ProjectName"   # actual .slnx name at A:\ — rename here if the solution is renamed
+  platform: "Cline (VS Code extension), workspace root B:\pmcro-cline (self-contained instance), domain A:\ (real Colony source)"
+
+cadence:
+  max_loops: 3
+  parallel_steps: false
+  commitment: "cycle 1 of a running 30-day window, started 2026-07-10"
+  # This field is a stated intention, not an enforced mechanism — nothing
+  # in this template makes a 30-day cadence happen automatically. It
+  # happens because cycles actually get run most days and sealed here.
+  # See CYCLE-LOG.md for the day-by-day record.
+
+evidence:
+  definition: >
+    A real Cline tool-call/tool-result pair against the actual A:\
+    project: a write_to_file or replace_in_file diff actually applied
+    and re-read, an execute_command call's real captured stdout/stderr/
+    exit code (dotnet build, dotnet test, git), or a use_mcp_tool result
+    (e.g. Filesystem MCP, Postman, Atlassian Rovo). Never a narrated
+    "this should have worked."
+
+trail:
+  format: "one directory per trailId under trails/, one file per phase per cycle (00-frame.json, NN-plan.jsonl, NN-make.jsonl, NN-check.jsonl, NN-reflect.jsonl, disposition.json)"
+  location: "B:\\pmcro-cline\\.pmcro\\trails\\<trailId>\\"
+
+hil:
+  transport: "Cline's native tool-approval UI (chat-button style)"
+  fires_on: TYPE1
+  shrinks_over_time: false   # not evidenced yet in this instance
+
+subject_agents:
+  # Cline is a single monolithic tool-loop; "subject agents" are Cline's
+  # own tool groups, each owning its own TYPE1/TYPE2 boundary — see
+  # agents/registry.md for the authoritative mapping.
+  - name: cline-fs-agent
+    type1_actions: [write_to_file, replace_in_file]
+    type2_actions: [read_file, list_files, search_files, list_code_definition_names]
+  - name: cline-terminal-agent
+    type1_actions: [execute_command]   # dotnet build/test/run, git, ollama, aspire cli
+    type2_actions: []   # no safe read-only subset; always TYPE1
+  - name: cline-browser-agent
+    type1_actions: [browser_action.click, browser_action.type]
+    type2_actions: [browser_action.launch, browser_action.scroll, browser_action.screenshot]
+  - name: cline-mcp-agent
+    type1_actions: ["use_mcp_tool (any mutating server tool, e.g. Filesystem:write_file, Atlassian Rovo:createJiraIssue)"]
+    type2_actions: ["use_mcp_tool (read-only server tool, e.g. Filesystem:list_directory, Atlassian Rovo:getJiraIssue)", access_mcp_resource]
