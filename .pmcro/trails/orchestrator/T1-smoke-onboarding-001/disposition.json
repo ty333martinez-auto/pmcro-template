@@ -1,0 +1,10 @@
+{
+  "TrailId": "T1-smoke-onboarding-001",
+  "SeedIntent": "SeedIntent: Run a smoke test. Create a file called 'ONBOARDING_SUCCESS.md'. Verify it exists. Seal the trail.",
+  "Disposition": "Accept",
+  "FinalOutput": "T1-smoke-onboarding-001 completed. Smoke test passed: ONBOARDING_SUCCESS.md created in workspace root (384 bytes, non-empty, readable confirmation message). All 3 checker checks passed (C001 file exists, C002 non-empty/readable, C003 no shell logging). The Plan-Make-Check-Reflect loop executed end-to-end and is verified working in this environment. Trail sealed.",
+  "RetryContext": null,
+  "HaltReason": null,
+  "EarnedConstraints": [],
+  "CycleNumber": 1
+}

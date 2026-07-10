@@ -1,0 +1,12 @@
+{
+  "name": "skill-creator",
+  "version": "2026.07.10",
+  "description": "Creates, tests, and optimizes new Cline Agent Skills.",
+  "triggers": [
+    "create skill",
+    "skill creator",
+    "optimize skill",
+    "draft skill"
+  ],
+  "type": "agent-skill"
+}

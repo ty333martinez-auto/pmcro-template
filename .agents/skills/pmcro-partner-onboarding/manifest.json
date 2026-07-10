@@ -1,0 +1,15 @@
+{
+  "name": "pmcro-partner-onboarding",
+  "version": "2026.07.10",
+  "description": "Guides partners and teammates through cloning the pmcro-template, setting up the environment, and running their first validated PMCR-O cycles.",
+  "triggers": [
+    "onboard me",
+    "onboard partner",
+    "how to use pmcro",
+    "clone template",
+    "proving prompts",
+    "lawn-mowing test",
+    "verify loop"
+  ],
+  "type": "agent-skill"
+}

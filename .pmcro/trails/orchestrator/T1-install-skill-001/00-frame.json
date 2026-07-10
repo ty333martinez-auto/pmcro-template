@@ -1,0 +1,1 @@
+{"TrailId": "T1-install-skill-001", "SeedIntent": "Install the 'skill-creator' system skill into the project. Create .agents/skills/skill-creator/ with manifest.json and SKILL.md. Verify indexing. Seal as T1-install-skill-001.", "StartedUtc": "2026-07-10T14:03:00Z"}
