@@ -1,0 +1,24 @@
+name: Test Signal InfoWells Skills
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'products/signal-inforwells-pmcro/**'
+      - 'tests/test_signal_inforwells.py'
+      - '.github/workflows/test-signal-inforwells.yml'
+  pull_request:
+    paths:
+      - 'products/signal-inforwells-pmcro/**'
+      - 'tests/test_signal_inforwells.py'
+      - '.github/workflows/test-signal-inforwells.yml'
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run InfoWells unit tests
+        run: python -m unittest discover -s tests -p 'test_signal_inforwells.py' -v
