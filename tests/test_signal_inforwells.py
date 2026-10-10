@@ -20,13 +20,16 @@ class HarnessTests(unittest.TestCase):
         self.assertEqual(result["status"],"descriptive_pair")
         self.assertIn("cannot establish",result["interpretation_limit"])
 class RegistryTests(unittest.TestCase):
-    def record(self):
-        return {"run_id":"R1","scenario_id":"S1","condition":"baseline","status":"experimental","recognition_state":"Don't Know Yet","evidence":["fixture"],"limitations":["single case"],"provenance":{"source":"fixture","method":"manual"}}
-    def test_append_valid_record(self):
+    def record(self,run_id):
+        return {"run_id":run_id,"scenario_id":"S1","condition":"baseline","status":"experimental","recognition_state":"Don't Know Yet","evidence":["fixture"],"limitations":["single case"],"provenance":{"source":"fixture","method":"manual"}}
+    def test_append_records_as_separate_jsonl_lines(self):
         with tempfile.TemporaryDirectory() as directory:
-            path=Path(directory)/"runs.jsonl"; registry.append_record(path,self.record())
-            self.assertEqual(len(path.read_text().splitlines()),1)
+            path=Path(directory)/"runs.jsonl"
+            registry.append_record(path,self.record("R1")); registry.append_record(path,self.record("R2"))
+            lines=path.read_text(encoding="utf-8").splitlines()
+            self.assertEqual(len(lines),2)
+            self.assertEqual(__import__("json").loads(lines[1])["run_id"],"R2")
     def test_missing_provenance_rejected(self):
-        record=self.record(); del record["provenance"]
+        record=self.record("R1"); del record["provenance"]
         self.assertTrue(registry.validate_record(record))
 if __name__=="__main__": unittest.main()
