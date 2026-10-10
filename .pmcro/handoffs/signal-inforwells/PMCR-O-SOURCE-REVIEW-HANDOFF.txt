@@ -1,0 +1,11 @@
+See canonical copy:
+https://github.com/ty333martinez-auto/signal-infowells/blob/main/.pmcro/handoffs/signal-infowells/PMCR-O-SOURCE-REVIEW-HANDOFF.txt
+
+Independent SIW marketplace:
+https://github.com/ty333martinez-auto/signal-infowells
+
+Shared chats (content not tool-verified):
+https://claude.ai/share/4ccd3374-c49b-495b-816f-e5d6bc2c3532
+https://chatgpt.com/s/cx_6ac9dad757708191a1ab51f16dd6a341
+
+Give agents the SIW URL above for full inventory, CapCut prompt, error registry seeds, and review sequence.
