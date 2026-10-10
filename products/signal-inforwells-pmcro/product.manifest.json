@@ -1,0 +1,23 @@
+{
+  "product_id": "signal-inforwells-pmcro",
+  "name": "Signal InfoWells PMCR-O Marketplace Product",
+  "version": "0.1.0-experimental",
+  "status": "experimental",
+  "domain": "reasoning-framework",
+  "core_authority": "none",
+  "publication_status": "branch-not-merged",
+  "skills": [
+    "skills/signal-inforwells-harness",
+    "skills/signal-inforwells-registry"
+  ],
+  "protocols": [
+    "protocols/bounded-recursive-run.md"
+  ],
+  "guardrails": [
+    "No pillar defines reality alone",
+    "Recognition formalizes knowing after examination; continuous operation remains experimental",
+    "Never turn missing evidence into a positive claim",
+    "Maker cannot independently approve its own output",
+    "External side effects require explicit authorization"
+  ]
+}
