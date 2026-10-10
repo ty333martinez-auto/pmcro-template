@@ -16,5 +16,5 @@ def append_record(path,record):
     if errors: raise ValueError("; ".join(errors))
     item=dict(record); item.setdefault("recorded_at",datetime.now(timezone.utc).isoformat())
     target=Path(path); target.parent.mkdir(parents=True,exist_ok=True)
-    with target.open("a",encoding="utf-8") as stream: stream.write(json.dumps(item,sort_keys=True)+"\\n")
+    with target.open("a",encoding="utf-8") as stream: stream.write(json.dumps(item,sort_keys=True)+"\n")
     return item
